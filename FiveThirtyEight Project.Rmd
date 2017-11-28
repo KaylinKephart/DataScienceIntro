@@ -1,0 +1,41 @@
+---
+title: "FiveThirtyEight Project"
+author: "Kaylin Kephart and Wendy Chen"
+date: "9/7/2017"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(fivethirtyeight)
+```
+
+```{r}
+head(steak_survey)
+str(steak_survey)
+```
+1. One variable bar graph that shows how people like their steak cooked. Visual cues: position
+```{r}
+steak=subset(steak_survey,!is.na(steak_prep))
+ggplot(data = steak, mapping = aes(x = steak_prep)) + 
+  geom_bar() + ggtitle("Steak Preference of Americans") + xlab("Steak Preperation") + ylab("Number of People")
+```
+2. Two variable bar graph that shows the relationship between gambling and how people like their steak cooked. The graph is trying to show if risky behaviors, such as gambling, result in people choosing a riskier steak preperation, such as rare. Visual cues: position, color
+```{r}
+steak=subset(steak_survey, !is.na(gamble)& !is.na(steak_prep))
+ggplot(data = steak, mapping = aes(x = steak_prep)) + 
+  geom_bar(mapping = aes(fill = gamble)) + ggtitle("How Americans like Their Steak Prepared vs. Do they Gamble") + xlab("Steak Preperation") + ylab("Number of People") + scale_fill_discrete(name="Gambling")
+```
+3. This is a three variable bar graph that relates the risky behaviors of gambling and playing the lottery to how Americans like their steak to be cooked. Visual cues: position, color, facets
+```{r}
+steak=subset(steak_survey, !is.na(gamble) & !is.na(lottery_a)& !is.na(steak_prep))
+names = c('FALSE'="Does Not Play the lottery",'TRUE'="Plays the lottery")
+ggplot(data = steak, mapping = aes(x=steak_prep,fill=gamble)) + 
+  geom_bar()+facet_wrap(~ lottery_a, ncol = 1, labeller=as_labeller(names)) + ggtitle("How Americans like Their Steak Prepared vs. Risky Behaviors") + xlab("Steak Preperation") + ylab("Number of People") + scale_fill_discrete("Gambling")
+
+```
+4. A graph similar to the one in the Five Thirty Eight article.
+```{r}
+steak=subset(steak_survey,!is.na(steak_prep))
+ggplot(data = steak, mapping = aes(x = steak_prep)) + 
+  geom_bar()+ coord_flip() + ggtitle("'How Do You Like Your Steak Prepared'") +xlab("") + ylab("")
+```
